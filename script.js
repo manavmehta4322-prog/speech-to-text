@@ -1,49 +1,20 @@
-const output = document.getElementById
-("output");
+const text = document.getElementById("text");
+const button = document.getElementById("button");
 
-const startButton = document.
-getElementById("startButton")
+button.addEventListener("click", () => {
+    const speechText = text.value;
 
-let finalTranscript = "";
-
-const SpeechRecognition = window.
-SpeechRecognition || window.
-webkitSpeechRecognition;
-
-const recognition = new SpeechRecognition
-();
-
-recognition.lang = "en-US"
-recognition.interimResults = true;
-
-startButton.addEventListener('click',() =>{
-    finalTranscript = '';
-    output.textContent = '';
-    recognition.start();
-    startButton.textContent='listening..';
-});
-
-recognition.addEventListener('result',
-(e) => {
-    const transcript = Array.from(e.results)
-        .map(result => result[0].
-        transcript).join('');
-
-        if (e.results[0].isFinal){
-    finalTranscript = transcript;
-    output.textContent =
-    finalTranscript;
-}
-});
-
-recognition.addEventListener('end',() =>{
-    startButton.textContent = 'startButton';
-    recognition.start();
-});
-
-document.addEventListener('keydown',(e)=>{
-    if (e.key == 'Escape'){
-        recognition.stop();
-        startButton.textContent = 'startButton';
+    if (speechText.trim() === "") {
+        return;
     }
+
+    window.speechSynthesis.cancel();
+
+    const speech = new SpeechSynthesisUtterance(speechText);
+    speech.lang = "en-US";
+    speech.rate = 1;
+    speech.pitch = 1;
+    speech.volume = 1;
+
+    window.speechSynthesis.speak(speech);
 });
